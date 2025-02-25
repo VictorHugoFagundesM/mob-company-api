@@ -20,7 +20,7 @@ class PhoneController extends Controller
      */
     public function getData(Request $request): JsonResponse
     {
-        $phones = Phone::get();
+        $phones = Phone::orderBy("updated_at", "desc")->get();
         return response()->json($phones);
     }
 
@@ -46,7 +46,7 @@ class PhoneController extends Controller
 
         } catch (Exception $e) {
             Log::error("[PhoneController-store] Houve um erro ao registrar a linha: ".$e->getMessage());
-            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 400);
+            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 500);
         }
 
     }
@@ -74,25 +74,31 @@ class PhoneController extends Controller
 
         } catch (Exception $e) {
             Log::error("[PhoneController-store] Houve um erro ao registrar a linha: ".$e->getMessage());
-            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 400);
+            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 500);
         }
     }
 
     /**
      * Apaga o registro da linha telefônica
      *
-     * @param Phone $phone
+     * @param Request $request
      * @return JsonResponse
      */
-    public function destroy(Phone $phone): JsonResponse
+    public function destroy(Request $request): JsonResponse
     {
         try {
-            $phone->delete();
-            return response()->json("Linha telefônica removida com sucesso!");
+            $phone = Phone::find($request->id);
+
+            if ($phone) {
+                $phone->delete();
+                return response()->json("Linha telefônica removida com sucesso!");
+            }
+
+            return response()->json("Linha telefônica não encotrada!", 400);
 
         } catch (Exception $e) {
             Log::error("[PhoneController-store] Houve um erro ao registrar a linha: ".$e->getMessage());
-            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 400);
+            return response()->json("Ocorreu um problema ao registrar a linha, tente novamente mais tarde ou contate um admnistrador", 500);
         }
     }
 }
