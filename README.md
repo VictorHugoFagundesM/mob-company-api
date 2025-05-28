@@ -4,8 +4,6 @@
 
 Olá!
 
-Aqui está o projeto desenvolvido para a fase de testes do processo seletivo. A API foi construída utilizando o PHP com o framework Laravel.
-
 Este desafio tem como objetivo a criação de uma interface funcional de cadastro de linhas telefônicas onde os usuários possam listar, criar, editar e removwe esses números.
 
 Requisitos
